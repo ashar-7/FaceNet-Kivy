@@ -1,0 +1,263 @@
+#:import la kivy.adapters.listadapter
+#: import ListItemButton kivy.uix.listview.ListItemButton
+#: import ra kivy.uix.recycleview.views.RecycleDataAdapter
+#: import Label kivy.uix.label.Label
+#: import Factory kivy.factory.Factory
+#: import Window kivy.core.window.Window
+
+<FaceRect@BoxLayout>:
+    orientation: 'vertical'
+    name: ''
+    im_path: ''
+    background_color: 1, 1, 0, 1
+    Label:
+        text: root.name
+    Image:
+        size: self.size
+        source: 'saved_faces/'+root.name+'/'+root.name+'.png'
+
+<FacesView>:
+    viewclass: 'FaceRect'
+    RecycleGridLayout:
+        cols: 7
+        size_hint: None,None
+        width: Window.size[0]
+        height: self.minimum_height
+
+
+<BrowseFilesPopup>:
+    auto_dismiss: False
+    title: 'Browse Files'
+    title_font: 'Calibri'
+    title_color: 1, 1, 1, 1
+    title_size: '40dp'
+    separator_color: .25,.95,.67,1
+    separator_height: 2
+    size_hint: None,None
+    size: Window.size[0] - (Window.size[0] / 6), Window.size[1] - (Window.size[1] / 6)
+
+    on_open: self.do_select()
+
+<BrowseFilesPredictPopup>:
+    auto_dismiss: False
+    title: 'Browse Files'
+    title_font: 'Calibri'
+    title_color: 1, 1, 1, 1
+    title_size: '40dp'
+    separator_color: .25,.95,.67,1
+    separator_height: 2
+    size_hint: None,None
+    size: Window.size[0] - (Window.size[0] / 6), Window.size[1] - (Window.size[1] / 6)
+
+    on_open: self.do_select(multiselect=False)
+
+<AddFacePopup>:
+    auto_dismiss: False
+    title: 'Add Face'
+    title_font: 'Calibri'
+    title_color: 1, 1, 1, 1
+    title_size: '40dp'
+    separator_color: .25,.95,.67,1
+    separator_height: 2
+    size_hint: None,None
+    size: Window.size[0] - (Window.size[0] / 10), Window.size[1] - (Window.size[1] / 10)
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: 30
+            padding: 10
+            Label:
+                text: 'Name'
+                font_size: 20
+                size_hint: None,None
+                pos_hint: {'x': .1, 'y': .5}
+
+            TextInput:
+                id: face_name
+                height: 30
+                size_hint_y: None
+                pos_hint: {'x': .1, 'y': .73}
+                multiline: False
+                focus: True
+
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: 20
+            spacing: 30
+            Label:
+                text: 'Add images:'
+                font_size: 20
+                size_hint: None,None
+                pos_hint: {'x': 1.5, 'y': 1}
+            Button:
+                text: '+'
+                size_hint: None,None
+                size: 100, 30
+                pos_hint: {'x': 2, 'y': 1.3}
+                on_release: Factory.BrowseFilesPopup().open()
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            Button:
+                text: 'Done'
+                size_hint: None,None
+                size: 100, 40
+                pos_hint: {'center_x': .5, 'center_y': 1}
+                on_release: root.add_face()
+
+            Button:
+                text: 'Cancel'
+                size_hint: None,None
+                size: 100, 40
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release: root.dismiss()
+
+<AddPredictButton@Button>:
+    font_size: 20
+    color: 0,0,0,1
+    background_normal: ''
+    background_color: 1,1,1,1
+    size_hint: .2, None
+    pos_hint: {'center_x': .5}
+
+<TrainScreen>:
+    id: train_screen
+
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            pos_hint: {'top':1}
+            background_image: 'graphics/white_bg.png'
+            ActionView:
+                ActionPrevious:
+                    title: 'Training'
+                    color: 0,0,0,1
+                ActionButton:
+                    text: 'Predict'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'predict'
+                ActionButton:
+                    text: 'Train'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'train'
+                ActionButton:
+                    text: 'Faces'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'faces'
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 100
+            spacing: 10
+
+            AddPredictButton:
+                text: 'Add Face'
+                on_release: Factory.AddFacePopup().open()
+            Label:
+                text: 'Notes:\n\n1. Those images in which no face is detected will be ignored.\n2. The functionality for deleting faces and adding more photos for a face doesn\'t exist yet.\n3. Use the Icon View while selecting the image because for some reason the \n     List View doesn\'t highlight the selected files.'
+                font_size: 18
+
+<FacesScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            pos_hint: {'top':1}
+            background_image: 'graphics/white_bg.png'
+            ActionView:
+                ActionPrevious:
+                    title: 'Faces'
+                    color: 0,0,0,1
+                ActionButton:
+                    text: 'Predict'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'predict'
+                ActionButton:
+                    text: 'Train'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'train'
+                ActionButton:
+                    text: 'Faces'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'faces'
+                ActionButton:
+                    text: 'Update'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.ids.faces_view.prepare_faces()
+
+        BoxLayout:
+            padding: 10
+            spacing: 10
+            FacesView:
+                id: faces_view
+
+<PredictScreen>:
+    predicted_name: ''
+    tmp_predict_path_list: ''
+    BoxLayout:
+        orientation: 'vertical'
+        ActionBar:
+            pos_hint: {'top':1}
+            background_image: 'graphics/white_bg.png'
+            ActionView:
+                ActionPrevious:
+                    title: 'Settings'
+                    color: 0,0,0,1
+                ActionButton:
+                    text: 'Predict'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'predict'
+                ActionButton:
+                    text: 'Train'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'train'
+                ActionButton:
+                    text: 'Faces'
+                    color: 0,0,0,1
+                    background_normal: 'graphics/red_bg.png'
+                    font_size: 20
+                    on_press: root.manager.current = 'faces'
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 20
+            spacing: 20
+            AddPredictButton:
+                text: 'Predict Face'
+                on_release: Factory.BrowseFilesPredictPopup().open()
+            Button:
+                text: 'Display'
+                size_hint: .4, .5
+                pos_hint: {'center_x': .5}
+                on_press: root.set_predicted_name_and_path()
+            Label:
+                text: 'Name: '+ root.predicted_name
+                font_size: 20
+            Image:
+                source: root.tmp_predict_path_list
+                keep_ratio: True
+                size_hint_y: None
+                size_hint_x: None
+                width: 200
+                height: 200/self.image_ratio
+                pos_hint: {'center_x': .5}
