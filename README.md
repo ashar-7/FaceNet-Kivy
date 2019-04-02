@@ -18,3 +18,7 @@ Make sure you've put the models in the correct directory and run the app:
 `python app.py` (Please run it from the directory where the app.py lies).
 
 ## Screenshots
+![alt text](https://raw.githubusercontent.com/ashar-7/FaceNet-Kivy/screenshots/faces.jpg)
+![alt text](https://raw.githubusercontent.com/ashar-7/FaceNet-Kivy/screenshots/train.jpg)
+![alt text](https://raw.githubusercontent.com/ashar-7/FaceNet-Kivy/screenshots/predict.jpg)
+
