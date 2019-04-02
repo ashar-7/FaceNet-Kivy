@@ -19,7 +19,9 @@ Make sure you've put the models in the correct directory and run the app:
 
 ## Screenshots
 ![alt text](screenshots/training.jpg?raw=true "Training")
+
 ![alt text](screenshots/faces.jpg?raw=true "Faces")
+
 ![alt text](screenshots/predict.jpg?raw=true "Predict")
 
 
